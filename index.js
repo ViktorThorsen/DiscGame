@@ -447,14 +447,14 @@ const Line3 = new Line({
   y1: canvas.height / 2,
   angle: 0,
   length: 20,
-  color: "rgb(37, 150, 190)"
+  color: "rgb(160, 234, 251, 1)"
 });
 const Line4 = new Line({
   x1: canvas.width / 2,
   y1: canvas.height / 2,
   angle: 0,
   length: 20,
-  color: "rgb(37, 150, 190)"
+  color: "rgb(160, 234, 251, 1)"
 });
 //Objects --------------------------------------------------------------------------------------------- Objects
 
@@ -922,10 +922,19 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 //rectangularCollision ---------------------------------------------------------------------------------------- rectangularCollision
 
 //Animate ---------------------------------------------------------------------------------------- Animate
+
+function animateMenu() {
+  const animationID = window.requestAnimationFrame(animateMenu);
+
+  console.log("animatemenu")
+}
+animateMenu()
+
+
+
 //Draw ---------------------------------------------------------------- Draw
 function animate() {
-  window.requestAnimationFrame(animate);
-
+ const animationID = window.requestAnimationFrame(animate);
   background.draw();
   player.draw();
   disc1.draw();
@@ -945,11 +954,11 @@ function animate() {
 }
   backPack.draw();
   if (items.includes(disc1) || items.includes(disc2)) {
-    circleDot.draw();
     Line1.draw()
     Line2.draw()
     Line3.draw()
     Line4.draw()
+    circleDot.draw();
   if (!angleLock) {
     if (!charging && !disc1.tossed) {
     Line1.length = (150 * items[0].speed) * 300;
@@ -1695,7 +1704,6 @@ if (inCage) {
     }
   }
 }
-animate();
 //Animate ---------------------------------------------------------------------------------------- Animate
 
 //Keys ---------------------------------------------------------------------------------------- Keys
