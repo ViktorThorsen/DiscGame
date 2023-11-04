@@ -1,4 +1,5 @@
 const canvas = document.querySelector("canvas");
+
 const c = canvas.getContext("2d");
 
 canvas.width = 1024;
@@ -74,6 +75,12 @@ const rndInt2 = randomIntFromInterval(-250, 65);
 //Images ---------------------------------------------------------------------------------------------- Images
 const image = new Image();
 image.src = "./img/Map1.png";
+
+const menuBackgroundIMG = new Image();
+menuBackgroundIMG.src = "./img/menubackground.png";
+
+const playButtonIMG = new Image();
+playButtonIMG.src = "./img/playbutton.png";
 
 const foregroundImage = new Image();
 foregroundImage.src = "./img/foregroundobjects.png";
@@ -155,6 +162,22 @@ inventory.src = "./img/inventorylayout.png";
 //Images ---------------------------------------------------------------------------------------------- Images
 
 //Objects --------------------------------------------------------------------------------------------- Objects
+const menuBackground = new Sprite({
+  position: {
+    x: 0,
+    y: 0
+  },
+  image: menuBackgroundIMG,
+});
+const playButton = new Sprite({
+  position: {
+    x: 412,
+    y: 238
+  },
+  image: playButtonIMG,
+});
+
+
 const player = new Sprite({
   position: {
     x: canvas.width / 2 - 56 / 4,
@@ -925,10 +948,12 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 
 function animateMenu() {
   const animationID = window.requestAnimationFrame(animateMenu);
-
-  console.log("animatemenu")
+  menuBackground.draw()
+  playButton.draw()
+  
 }
 animateMenu()
+
 
 
 
@@ -1704,6 +1729,7 @@ if (inCage) {
     }
   }
 }
+
 //Animate ---------------------------------------------------------------------------------------- Animate
 
 //Keys ---------------------------------------------------------------------------------------- Keys
