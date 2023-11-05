@@ -2,6 +2,9 @@ const canvas = document.querySelector("canvas");
 
 const c = canvas.getContext("2d");
 
+var playButton = document.getElementById("playButton");
+var menu = document.getElementById("container");
+
 canvas.width = 1024;
 canvas.height = 576;
 
@@ -78,9 +81,6 @@ image.src = "./img/Map1.png";
 
 const menuBackgroundIMG = new Image();
 menuBackgroundIMG.src = "./img/menubackground.png";
-
-const playButtonIMG = new Image();
-playButtonIMG.src = "./img/playbutton.png";
 
 const foregroundImage = new Image();
 foregroundImage.src = "./img/foregroundobjects.png";
@@ -168,13 +168,6 @@ const menuBackground = new Sprite({
     y: 0
   },
   image: menuBackgroundIMG,
-});
-const playButton = new Sprite({
-  position: {
-    x: 412,
-    y: 238
-  },
-  image: playButtonIMG,
 });
 
 
@@ -534,6 +527,7 @@ let elementsPositionsBeforeMapMode = {
 
 //Variables ---------------------------------------------------------------------------------------- Variables
 
+let onMenu = true
 let angleLock = false
 let discInWater = false
 let inCage = false
@@ -585,6 +579,7 @@ const staticDisc = [disc1, disc2];
 const items = [];
 //Variables ---------------------------------------------------------------------------------------- Variables
 
+
 //calculateAngle ---------------------------------------------------------------------------------------- calculateAngle
 function calculateAngle(
   startPositionX,
@@ -618,6 +613,10 @@ function pickUpItem() {
   }
 }
 //pickUpItem ---------------------------------------------------------------------------------------- pickUpItem
+
+function handleSpriteClick() {
+  console.log("print");
+}
 
 
 //MoveMap ---------------------------------------------------------------------------------------- MoveMap
@@ -945,17 +944,6 @@ function rectangularCollision({ rectangle1, rectangle2 }) {
 //rectangularCollision ---------------------------------------------------------------------------------------- rectangularCollision
 
 //Animate ---------------------------------------------------------------------------------------- Animate
-
-function animateMenu() {
-  const animationID = window.requestAnimationFrame(animateMenu);
-  menuBackground.draw()
-  playButton.draw()
-  
-}
-animateMenu()
-
-
-
 
 //Draw ---------------------------------------------------------------- Draw
 function animate() {
@@ -2251,7 +2239,8 @@ canvas.addEventListener("mouseup", (event) => {
 //Mousedown ---------------------------------------------------------------------------------------- Mousedown
 canvas.addEventListener("mousedown", (event) => {
   if (event.button === 0) {
-    if (!mapMode) {
+    
+    if (!mapMode && !onMenu) {
       keys.mouseLeft.pressed = true;
 
       if (items.includes(disc1) && !isThrowing) {
@@ -2275,3 +2264,14 @@ canvas.addEventListener("mousedown", (event) => {
   }
 });
 //Mousedown ---------------------------------------------------------------------------------------- Mousedown
+if (onMenu) {
+playButton.addEventListener("click", function() {
+  // Perform actions related to the canvas when the button is clicked
+  console.log("yes")
+  playButton.disabled = true;
+  playButton.style.display = "none";
+  menu.style.backgroundImage = "none";
+  onMenu = false
+  
+  animate();
+})};
