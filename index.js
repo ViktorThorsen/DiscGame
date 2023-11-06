@@ -1,10 +1,14 @@
 const canvas = document.querySelector("canvas");
 
 const c = canvas.getContext("2d");
-
+var volumeButton = document.getElementById("volumeButton");
 var playButton = document.getElementById("playButton");
 var menu = document.getElementById("container");
+var resetButton = document.getElementById("resetButton");
+var counterValue = document.getElementById('counterValue')
 
+const backgroundMusic = document.getElementById("background-music");
+backgroundMusic.volume = 0.1;
 canvas.width = 1024;
 canvas.height = 576;
 
@@ -66,6 +70,19 @@ playeronlycollisionsMap.forEach((row, i) => {
       );
   });
 });
+
+const initialBoundaryPositions = boundaries.map(boundary => ({
+  x: boundary.position.x,
+  y: boundary.position.y,
+}));
+const initialwaterBoundaryPositions = waterboundaries.map(waterboundary => ({
+  x: waterboundary.position.x,
+  y: waterboundary.position.y,
+}));
+const initialplayeronlyBoundaryPositions = playeronlyboundaries.map(playeronlyboundary => ({
+  x: playeronlyboundary.position.x,
+  y: playeronlyboundary.position.y,
+}));
 
 //random integer -------------------------------------------------------------------------------------- random integer
 const rndInt = randomIntFromInterval(-250, 65);
@@ -527,6 +544,10 @@ let elementsPositionsBeforeMapMode = {
 
 //Variables ---------------------------------------------------------------------------------------- Variables
 
+let throwcount = 0
+let resett = false
+let canResettingGame = true
+let isMusicPlaying = true;
 let onMenu = true
 let angleLock = false
 let discInWater = false
@@ -597,11 +618,13 @@ function calculateAngle(
 //pickUpItem ---------------------------------------------------------------------------------------- pickUpItem
 function pickUpItem() {
   if (
-    (player.pickup && overlappingItem === disc1) ||
-    (player.pickup && overlappingItem === disc2)
+    (player.pickup && overlappingItem === disc1) && !mapMode ||
+    (player.pickup && overlappingItem === disc2) && !mapMode
   ) {
     canMove = false
     inCage = false
+    angleLock = false
+    resett = false
     overlappingItem.picked = true;
     items.push(overlappingItem);
     player.pickup = false;
@@ -614,8 +637,87 @@ function pickUpItem() {
 }
 //pickUpItem ---------------------------------------------------------------------------------------- pickUpItem
 
-function handleSpriteClick() {
-  console.log("print");
+function resetGame() {
+throwcount = 0
+counterValue.textContent = throwcount;
+angleLock = false
+discInWater = false
+inCage = false
+borderHit = false
+outsideLeft = false
+outsideRight = false
+outside = false
+turnangleDifference = 0
+earlyturnAngle = 0
+travelAngleDifference = 0
+perfecto = false
+currentMouseX = 0
+currentMouseY = 0
+aimLineTurn = 0;
+aimlinePos = false;
+earlyTurn = 0;
+angleToDisc = 0;
+reflectionAngle = 0;
+distancefromdisc1 = 0;
+angleInRadians = 0;
+startanglecharge = 0;
+moveup = true;
+movedown = false;
+charging = false;
+turn = 0;
+discinitialAngle = null;
+initialAngle = null;
+initialAngle2 = null;
+initialAngle3 = null;
+initialAngle4 = null;
+isMouseMoving = false;
+power = 0;
+canShowMap = true;
+isThrowing = false;
+showHelpDragImage = false;
+mapMode = false;
+initialMouseX = 0;
+initialMouseY = 0;
+mouseDragging = false;
+mouseX = 0;
+mouseY = 0;
+landed = true;
+overlappingItem = "";
+canMove = true;
+u = 0;
+Bounce = false;
+  background.position.x = offset.x
+  background.position.y = offset.y
+  foreground.position.x = offset.x
+  foreground.position.y = offset.y
+  disc1.position.x = (canvas.width / 2) - 7.5
+  disc1.position.y = (canvas.height / 2) - 7.5
+  cage.position.x = 2572
+  cage.position.y = -72
+  player.position.x = canvas.width / 2 - 56 / 4
+  player.position.y = canvas.height / 2 - 19
+
+  player.pickup = true
+  disc1.picked = false
+  overlappingItem.picked = false
+  circleDot.moving = true
+  disc1.landed = true
+    items.shift();
+
+  for (let i = 0; i < boundaries.length; i++) {
+    boundaries[i].position.x = initialBoundaryPositions[i].x;
+    boundaries[i].position.y = initialBoundaryPositions[i].y;
+  }
+  for (let i = 0; i < waterboundaries.length; i++) {
+    waterboundaries[i].position.x = initialwaterBoundaryPositions[i].x;
+    waterboundaries[i].position.y = initialwaterBoundaryPositions[i].y;
+  }
+  for (let i = 0; i < playeronlyboundaries.length; i++) {
+    playeronlyboundaries[i].position.x = initialplayeronlyBoundaryPositions[i].x;
+    playeronlyboundaries[i].position.y = initialplayeronlyBoundaryPositions[i].y;
+  }
+
+  canResettingGame = true
 }
 
 
@@ -910,6 +1012,7 @@ else if (inCage) {
       perfecto = false
       perfect.position.x = canvas.width / 2 - 25
       perfect.position.y = canvas.height / 2 - 12.5
+      
 }
 }
 
@@ -951,7 +1054,6 @@ function animate() {
   background.draw();
   player.draw();
   disc1.draw();
-  disc2.draw();
   if (isThrowing && !mapMode ) {
     items[0].draw();
   }
@@ -977,7 +1079,7 @@ function animate() {
     Line1.length = (150 * items[0].speed) * 300;
     Line1.angle = circleDot.angle
     Line2.length = (150 * items[0].speed) * 150;
-    Line2.angle = circleDot.angle
+    Line2.angle = Line1.angle
     Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
     Line3.angle = Line2.angle + Math.PI / 2
@@ -989,7 +1091,7 @@ function animate() {
       Line1.length = power * 300;
     Line1.angle = circleDot.angle
     Line2.length = power * 300;
-    Line2.angle = circleDot.angle
+    Line2.angle = Line1.angle
     Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
     Line3.angle = angleInRadians + Math.PI / 2
@@ -999,9 +1101,10 @@ function animate() {
     }
 }
     if (charging) {
-    Line2.length = power * 150
     Line1.length = power * 300;
+    Line2.length = power * 150
     Line1.angle = circleDot.angle
+    Line2.angle = Line1.angle
     Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
     Line3.angle = angleInRadians + Math.PI / 2
@@ -1030,10 +1133,10 @@ waterboundaries.forEach((waterboundary) => {
     playeronlyboundary.draw();
   });
   
-  if (player.pickup && !disc1.picked) {
+  if (player.pickup && !disc1.picked && !mapMode) {
     buttons.draw();
   }
-  if (player.pickup && !disc2.picked) {
+  if (player.pickup && !disc2.picked && !mapMode) {
     buttons.draw();
   }
 
@@ -1077,6 +1180,7 @@ cage.draw();
     aimlinePos = false;
     earlyTurn = 0;
     power = 0
+    Bounce = false
     overpass = false;
     items[0].speed = items[0].startingspeed;
     items[0].tossed = false;
@@ -1093,6 +1197,7 @@ cage.draw();
 
       player.position.x = elementsPositionsBeforeMapMode.player.x;
       player.position.y = elementsPositionsBeforeMapMode.player.y;
+
 
       foreground.position.x = elementsPositionsBeforeMapMode.foreground.x;
       foreground.position.y = elementsPositionsBeforeMapMode.foreground.y;
@@ -1114,12 +1219,10 @@ cage.draw();
       Line2.x1 = elementsPositionsBeforeMapMode.Line2.x1;
       Line2.y1 = elementsPositionsBeforeMapMode.Line2.y1;
 
-      Line3.x1 = elementsPositionsBeforeMapMode.Line3.x1;
-      Line3.y1 = elementsPositionsBeforeMapMode.Line3.y1;
+      
 
-      Line4.x1 = elementsPositionsBeforeMapMode.Line4.x1;
-      Line4.y1 = elementsPositionsBeforeMapMode.Line4.y1;
-
+      angleLock = false
+      
       boundaries.forEach((boundary, index) => {
         boundary.position.x =
           elementsPositionsBeforeMapMode[`boundary${index}`].x;
@@ -1141,9 +1244,10 @@ cage.draw();
       canMove = false;
       items[0].landed = false
       discInWater = false
+      canResettingGame = true
     }, 1500);
     }
-    if (!discInWater) {
+    if (!discInWater && !resett) {
     items[0].picked = false;
     turn = 0;
     aimLineTurn = 0;
@@ -1192,16 +1296,41 @@ cage.draw();
 
       Line4.x1 = elementsPositionsBeforeMapMode.Line4.x1;
       Line4.y1 = elementsPositionsBeforeMapMode.Line4.y1;
+
+      
 if (inCage) {
   disc1.position.x = cage.position.x + 7-5
   disc1.position.y = cage.position.y + 7-5
+  canMove = true
+  boundaries.forEach((boundary, index) => {
+    boundary.position.x =
+      elementsPositionsBeforeMapMode[`boundary${index}`].x;
+    boundary.position.y =
+      elementsPositionsBeforeMapMode[`boundary${index}`].y;
+  });
+  waterboundaries.forEach((waterboundary, index) => {
+    waterboundary.position.x =
+      elementsPositionsBeforeMapMode[`waterboundary${index}`].x;
+    waterboundary.position.y =
+      elementsPositionsBeforeMapMode[`waterboundary${index}`].y;
+  });
+  playeronlyboundaries.forEach((playeronlyboundary, index) => {
+    playeronlyboundary.position.x =
+      elementsPositionsBeforeMapMode[`playeronlyboundary${index}`].x;
+      playeronlyboundary.position.y =
+      elementsPositionsBeforeMapMode[`playeronlyboundary${index}`].y;
+  });
+  canMove = true;
+  canResettingGame = true
 }
   else {
+    
+    if (!resett) {
       disc1.position.x =
         player.position.x + distancefromdisc1 * Math.cos(angleToDisc);
       disc1.position.y =
         player.position.y + distancefromdisc1 * Math.sin(angleToDisc);
-}
+
       disc2.position.x = elementsPositionsBeforeMapMode.disc2.x;
       disc2.position.y = elementsPositionsBeforeMapMode.disc2.y;
 
@@ -1224,7 +1353,8 @@ if (inCage) {
           elementsPositionsBeforeMapMode[`playeronlyboundary${index}`].y;
       });
       canMove = true;
-    }, 1500);
+      canResettingGame = true
+    }}}, 1500);
   }}
 //Landed ---------------------------------------------------------------- Landed
 
@@ -1749,6 +1879,7 @@ window.addEventListener("keydown", (e) => {
         angleMeter.moving = false
         aimLine.moving = false
         if (mapMode) {
+          canResettingGame = false
           canMove = false;
           showHelpDragImage = true;
           elementsPositionsBeforeMapMode = {
@@ -1785,6 +1916,7 @@ window.addEventListener("keydown", (e) => {
 
           mapModefunc();
         } else {
+          canResettingGame = true
           if (!items.includes(disc1)){
             canMove = true
           }
@@ -1844,6 +1976,7 @@ window.addEventListener("keydown", (e) => {
         keys.m.pressed = true;
     break;
     case " ":
+      if (!charging && !isThrowing) {
       keys.space.pressed = true;
       angleLock = !angleLock
       if (angleLock) {
@@ -1858,7 +1991,7 @@ window.addEventListener("keydown", (e) => {
           angleMeter.moving = true
           aimLine.moving = true
         
-    }
+    }}
   break;
   }
 });
@@ -1893,6 +2026,13 @@ window.addEventListener("keyup", (e) => {
 });
 
 //Mousemove ---------------------------------------------------------------------------------------- Mousemove
+resetButton.addEventListener("click", function() {
+  if(canResettingGame) {
+  resett = true
+  resetGame()
+}
+});
+
 canvas.addEventListener("mousemove", (event) => {
   if (mapMode) {
     isMouseMoving = true;
@@ -1908,7 +2048,7 @@ canvas.addEventListener("mousemove", (event) => {
     }
   }
 
-  if (mouseDragging && !isThrowing && items.includes(disc1) && charging) {
+  if (mouseDragging && !isThrowing && items.includes(disc1) && charging && !resett) {
     currentMouseX = event.clientX - canvas.getBoundingClientRect().left;
     currentMouseY = event.clientY - canvas.getBoundingClientRect().top;
 
@@ -2166,8 +2306,11 @@ let powerangle2 =
 //Mouseup ---------------------------------------------------------------------------------------- Mouseup
 canvas.addEventListener("mouseup", (event) => {
   keys.mouseLeft.pressed = false;
-  if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode) {
+  if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode && !resett) {
+    throwcount++
+    counterValue.textContent = throwcount;
     isThrowing = true;
+    canResettingGame = false;
     charging = false;
     isMouseMoving = false;
     discinitialAngle = null;
@@ -2243,7 +2386,7 @@ canvas.addEventListener("mousedown", (event) => {
     if (!mapMode && !onMenu) {
       keys.mouseLeft.pressed = true;
 
-      if (items.includes(disc1) && !isThrowing) {
+      if (items.includes(disc1) && !isThrowing && !resett) {
         angleInRadians = circleDot.angle;
         circleDot.moving = false;
         canShowMap = false;
@@ -2264,14 +2407,28 @@ canvas.addEventListener("mousedown", (event) => {
   }
 });
 //Mousedown ---------------------------------------------------------------------------------------- Mousedown
+volumeButton.addEventListener("click", function() {
+  isMusicPlaying = !isMusicPlaying
+  if (!isMusicPlaying) {
+  backgroundMusic.pause();} 
+  else {backgroundMusic.play();}
+});
+
+
+
+
+
 if (onMenu) {
 playButton.addEventListener("click", function() {
   // Perform actions related to the canvas when the button is clicked
-  console.log("yes")
+  
   playButton.disabled = true;
   playButton.style.display = "none";
   menu.style.backgroundImage = "none";
+  resetButton.style.display = "block";
+  volumeButton.style.display = "block";
+  counterValue.style.display = "block";
   onMenu = false
-  
+  backgroundMusic.play();
   animate();
 })};

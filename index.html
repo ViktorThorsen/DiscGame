@@ -4,10 +4,10 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow: hidden; /* Prevent scrolling */
+        overflow: hidden;
     }
     body {
-        background: linear-gradient(to bottom, #364b6c, #202c48);
+        background: linear-gradient(to bottom, #5170a1, #151d30);
         margin: 0;
         display: flex;
         justify-content: center;
@@ -18,10 +18,12 @@
         display: block;
         position: relative;
         background-image: url(img/menubackground.png);
+        background-size: fill;
         background-color: black;
         border-radius: 10px;
         box-sizing: border-box;
         border: 4px solid;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
     }
     #playButton {
         position: absolute;
@@ -31,6 +33,55 @@
         transition: transform 0.2s;
 
     }
+    #volumeButton {
+        position: absolute;
+        bottom: 84%;
+        left: 5%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s;
+        display: none;
+    }
+    #resetButton {
+        position: absolute;
+        bottom: 84%;
+        left: 12%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s;
+        display: none;
+    }
+    #winButton {
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s;
+        font-size: 50px;
+        font-family: roboto;
+        color: white;
+        display: none;
+    }
+    #counterValue{
+        position: absolute;
+        top: 8%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s;
+        font-size: 50px;
+        font-family: roboto;
+        color: white;
+        display: none;
+    }
+    #spinToWin {
+        position: absolute;
+        top: 2.5%;
+        left: 50% - 499px;
+    }
+    #created {
+        position: absolute;
+        bottom: 2.5%;
+        left: 50% - 100px;
+    }
+    
     #container.disabled {
         pointer-events: none;
         
@@ -46,7 +97,18 @@
     }
     
 </style>
+<img id="spinToWin" src="img/spintowin.png" alt="spinToWin" />
+<img id="created" src="img/created.png" alt="CreatedByViktor" />
+<audio id="background-music" autoplay loop>
+    <source src="sounds/AFaded.m4a" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
 <div id="container">
+
+    <div id="winButton">Eagle</div>
+    <div id="counterValue">0</div>
+    <div> <img id="volumeButton" src="img/sound.png" alt="Volume" /></div>
+    <div> <img id="resetButton" src="img/restartbutton.png" alt="Reset" /></div>
     <div> <img id="playButton" src="img/playbutton.png" alt="Play" /></div>
 <canvas></canvas>
 </div>
