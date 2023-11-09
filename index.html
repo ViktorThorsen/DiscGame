@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <style>
+    @font-face {
+  font-family: '8-bit';
+  src: url('data/ADDLG.TTF') format('truetype'); /* Specify the path to your font file and format */
+}
     html, body {
         margin: 0;
         padding: 0;
@@ -49,16 +53,36 @@
         transition: transform 0.2s;
         display: none;
     }
+    
+    #cantresetButton {
+        position: absolute;
+        bottom: 84%;
+        left: 12%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.2s;
+        display: none;
+    }
     #winButton {
         position: absolute;
-        top: 8%;
+        top: 40%;
         left: 50%;
         transform: translate(-50%, -50%);
         transition: transform 0.2s;
         font-size: 50px;
-        font-family: roboto;
-        color: white;
+        font-family: "8-bit";
+        color: rgb(255, 255, 255);
+        text-shadow: 2px 2px 0 black, -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 0 0 2px black;
+        box-shadow: 0px 0px 100px 35px rgb(0, 0, 0);
         display: none;
+        background-image: url(img/boogie.png);
+        background-size: fill;
+        background-repeat: no-repeat;
+        border-radius: 20px;
+        border-style: solid;
+        padding-top: 150px;
+        padding-bottom: 50px;
+        padding-left: 100px;
+        padding-right: 100px;
     }
     #counterValue{
         position: absolute;
@@ -67,7 +91,7 @@
         transform: translate(-50%, -50%);
         transition: transform 0.2s;
         font-size: 50px;
-        font-family: roboto;
+        font-family: "8-bit";
         color: white;
         display: none;
     }
@@ -99,15 +123,17 @@
 </style>
 <img id="spinToWin" src="img/spintowin.png" alt="spinToWin" />
 <img id="created" src="img/created.png" alt="CreatedByViktor" />
+<audio id="victory">
+    <source src="sounds/woow.mp3" type="audio/mpeg">
+</audio>
 <audio id="background-music" autoplay loop>
     <source src="sounds/AFaded.m4a" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+</audio>
 <div id="container">
-
     <div id="winButton">Eagle</div>
     <div id="counterValue">0</div>
     <div> <img id="volumeButton" src="img/sound.png" alt="Volume" /></div>
+    <div> <img id="cantresetButton" src="img/cantrestartbutton.png" alt="Reset" /></div>
     <div> <img id="resetButton" src="img/restartbutton.png" alt="Reset" /></div>
     <div> <img id="playButton" src="img/playbutton.png" alt="Play" /></div>
 <canvas></canvas>

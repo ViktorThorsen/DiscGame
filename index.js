@@ -5,10 +5,15 @@ var volumeButton = document.getElementById("volumeButton");
 var playButton = document.getElementById("playButton");
 var menu = document.getElementById("container");
 var resetButton = document.getElementById("resetButton");
+var cantresetButton = document.getElementById("cantresetButton");
 var counterValue = document.getElementById('counterValue')
+var winButton = document.getElementById('winButton')
 
 const backgroundMusic = document.getElementById("background-music");
 backgroundMusic.volume = 0.1;
+
+const victorySound = document.getElementById("victory");
+victorySound.volume = 0.2;
 canvas.width = 1024;
 canvas.height = 576;
 
@@ -685,6 +690,9 @@ landed = true;
 overlappingItem = "";
 canMove = true;
 u = 0;
+winButton.style.display = "none"
+resetButton.style.bottom = "84%"
+resetButton.style.left = "12%"
 Bounce = false;
   background.position.x = offset.x
   background.position.y = offset.y
@@ -1012,7 +1020,47 @@ else if (inCage) {
       perfecto = false
       perfect.position.x = canvas.width / 2 - 25
       perfect.position.y = canvas.height / 2 - 12.5
-      
+if ( throwcount === 1) {
+  winButton.textContent = "Hole In One!"
+  winButton.style.backgroundImage = "url(img/menubackground.png)";
+}
+if ( throwcount === 2) {
+  winButton.textContent = "Eagle!"
+  winButton.style.backgroundImage = "url(img/eagle.png)";;
+}
+if ( throwcount === 3) {
+  winButton.textContent = "Birdie!"
+  winButton.style.backgroundImage = "url(img/birdie.png)";;
+}
+if ( throwcount === 4) {
+  winButton.textContent = "Par!"
+  winButton.style.backgroundImage = "url(img/par.png)";
+}
+if ( throwcount === 5) {
+  winButton.textContent = "Boogie"
+  winButton.style.backgroundImage = "url(img/boogie.png)";
+}
+if (throwcount === 6) {
+  winButton.textContent = "Dubble Boogie"
+  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.fontSize = "20px"
+}
+if (throwcount === 7) {
+  winButton.textContent = "Tripple Boogie"
+  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.fontSize = "20px"
+}
+if (throwcount >= 8) {
+  winButton.textContent = "Try Again"
+  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.fontSize = "20px"
+}
+disc1.landed
+victorySound.play();
+      resetButton.style.bottom = "20%"
+      resetButton.style.left = "45%"
+
+      winButton.style.display = "block"
 }
 }
 
@@ -1066,6 +1114,14 @@ function animate() {
 }
   if (disc2.picked) {
     discinpack2.draw();
+}
+if (canResettingGame){
+  resetButton.style.display = "block"
+  cantresetButton.style.display = "none"
+}
+if (!canResettingGame){
+  resetButton.style.display = "none"
+  cantresetButton.style.display = "block"
 }
   backPack.draw();
   if (items.includes(disc1) || items.includes(disc2)) {
@@ -1301,7 +1357,7 @@ cage.draw();
 if (inCage) {
   disc1.position.x = cage.position.x + 7-5
   disc1.position.y = cage.position.y + 7-5
-  canMove = true
+  canMove = false
   boundaries.forEach((boundary, index) => {
     boundary.position.x =
       elementsPositionsBeforeMapMode[`boundary${index}`].x;
@@ -1320,7 +1376,7 @@ if (inCage) {
       playeronlyboundary.position.y =
       elementsPositionsBeforeMapMode[`playeronlyboundary${index}`].y;
   });
-  canMove = true;
+  canMove = false;
   canResettingGame = true
 }
   else {
