@@ -84,6 +84,90 @@
         padding-left: 100px;
         padding-right: 100px;
     }
+    #replay {
+        position: absolute;
+        top: 70%;
+        left: 26%;
+        font-size: 20px;
+        font-family: "8-bit";
+        color: white;
+        display: none;
+    }
+    #replay:hover {
+      cursor: pointer;
+    }
+    #next {
+        position: absolute;
+        top: 70%;
+        right: 26%;
+        font-size: 20px;
+        font-family: "8-bit";
+        color: white;
+        display: none;
+    }
+    #spacehelpbutton {
+        position: absolute;
+        top: 28%;
+        left: 2%;
+        display: none; 
+        opacity: 1;
+    }
+    #qhelpbutton {
+        position: absolute;
+        top: 38%;
+        left: 2%;
+        display: none; 
+    }
+    #ehelpbutton {
+        position: absolute;
+        top: 61%;
+        left: 48.5%;
+        display: none; 
+    }
+    #leftmousehelpbutton {
+        position: absolute;
+        top: 48%;
+        left: 2%;
+        display: none; 
+    }
+    #pickupitemtext {
+        position: absolute;
+        top: 57%;
+        left: 44.5%;
+        font-size: 10px;
+        font-family: "8-bit";
+        color: white;
+        display: none; 
+    }
+    #throwdisctext {
+        position: absolute;
+        top: 49.5%;
+        left: 6%;
+        font-size: 10px;
+        font-family: "8-bit";
+        color: white;
+        display: none; 
+    }
+    #viewmaptext {
+        position: absolute;
+        top: 39.9%;
+        left: 6%;
+        font-size: 10px;
+        font-family: "8-bit";
+        color: white;
+        display: none;
+        opacity: 1;
+    }
+    #anglelockedtext {
+        position: absolute;
+        top: 30%;
+        left: 9%;
+        font-size: 10px;
+        font-family: "8-bit";
+        color: white;
+        display: none;
+        opacity: 1;
+    }
     #counterValue{
         position: absolute;
         top: 8%;
@@ -126,12 +210,25 @@
 <audio id="victory">
     <source src="sounds/woow.mp3" type="audio/mpeg">
 </audio>
+<audio id="background-music1">
+    <source src="sounds/heybrother.mp3" type="audio/mpeg">
+</audio>
 <audio id="background-music" autoplay loop>
     <source src="sounds/AFaded.m4a" type="audio/mpeg">
 </audio>
 <div id="container">
     <div id="winButton">Eagle</div>
     <div id="counterValue">0</div>
+    <div id="replay">Play Again</div>
+    <div id="next">Next Level</div>
+    <div id="anglelockedtext">Lock Angle</div>
+    <div id="pickupitemtext">Pick Up Disc</div>
+    <div id="viewmaptext">View Map</div>
+    <div id="throwdisctext">Hold to Throw</div>
+    <div> <img id="leftmousehelpbutton" src="img/leftmouse.png" alt="SPACE" /></div>
+    <div> <img id="ehelpbutton" src="img/ehelpbutton.png" alt="SPACE" /></div>
+    <div> <img id="qhelpbutton" src="img/qhelpbutton.png" alt="SPACE" /></div>
+    <div> <img id="spacehelpbutton" src="img/spacehelpbutton.png" alt="SPACE" /></div>
     <div> <img id="volumeButton" src="img/sound.png" alt="Volume" /></div>
     <div> <img id="cantresetButton" src="img/cantrestartbutton.png" alt="Reset" /></div>
     <div> <img id="resetButton" src="img/restartbutton.png" alt="Reset" /></div>

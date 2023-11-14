@@ -8,14 +8,26 @@ var resetButton = document.getElementById("resetButton");
 var cantresetButton = document.getElementById("cantresetButton");
 var counterValue = document.getElementById('counterValue')
 var winButton = document.getElementById('winButton')
-
+var nextButton = document.getElementById('next')
+var replayButton = document.getElementById('replay')
+var eHelpButton = document.getElementById('ehelpbutton')
+var qHelpButton = document.getElementById('qhelpbutton')
+var spaceHelpButton = document.getElementById('spacehelpbutton')
+var viewMapText = document.getElementById("viewmaptext");
+var pickUpItemText = document.getElementById("pickupitemtext");
+var throwDiscText = document.getElementById("throwdisctext");
+var leftMousehelpButton = document.getElementById("leftmousehelpbutton");
+var anglelockedtext = document.getElementById("anglelockedtext");
 const backgroundMusic = document.getElementById("background-music");
+const backgroundMusic1 = document.getElementById("background-music1");
 backgroundMusic.volume = 0.1;
+backgroundMusic1.volume = 0.4;
 
 const victorySound = document.getElementById("victory");
 victorySound.volume = 0.2;
 canvas.width = 1024;
 canvas.height = 576;
+
 
 collisionsMap = [];
 for (let i = 0; i < collisions.length; i += 200) {
@@ -549,6 +561,8 @@ let elementsPositionsBeforeMapMode = {
 
 //Variables ---------------------------------------------------------------------------------------- Variables
 
+let linesPositionsBeforeMapMode = {}
+let randomInteger = ""
 let throwcount = 0
 let resett = false
 let canResettingGame = true
@@ -630,6 +644,14 @@ function pickUpItem() {
     inCage = false
     angleLock = false
     resett = false
+    throwDiscText.style.display = "block"
+    leftMousehelpButton.style.display = "block"
+    pickUpItemText.style.display = "none"
+    eHelpButton.style.display = "none"
+    anglelockedtext.style.display = "block"
+    spaceHelpButton.style.display = "block"
+    qHelpButton.style.display = "block"
+    viewMapText.style.display = "block"
     overlappingItem.picked = true;
     items.push(overlappingItem);
     player.pickup = false;
@@ -693,7 +715,12 @@ u = 0;
 winButton.style.display = "none"
 resetButton.style.bottom = "84%"
 resetButton.style.left = "12%"
+nextButton.style.display = "none"
+replayButton.style.display = "none"
+winButton.style.display = "none"
 Bounce = false;
+overlappingItem = disc1;
+player.pickup = true;
   background.position.x = offset.x
   background.position.y = offset.y
   foreground.position.x = offset.x
@@ -1057,10 +1084,11 @@ if (throwcount >= 8) {
 }
 disc1.landed
 victorySound.play();
-      resetButton.style.bottom = "20%"
-      resetButton.style.left = "45%"
+winButton.style.display = "block"
 
-      winButton.style.display = "block"
+replayButton.addEventListener("click", function() {
+  resetGame()
+});
 }
 }
 
@@ -1109,10 +1137,10 @@ function animate() {
   if (charging && !mapMode) {
     items[0].draw();
   }
-  if (disc1.picked) {
+  if (disc1.picked && !mapMode) {
     discinpack.draw();
 }
-  if (disc2.picked) {
+  if (disc2.picked && !mapMode) {
     discinpack2.draw();
 }
 if (canResettingGame){
@@ -1123,7 +1151,8 @@ if (!canResettingGame){
   resetButton.style.display = "none"
   cantresetButton.style.display = "block"
 }
-  backPack.draw();
+if (!mapMode) { backPack.draw();}
+ 
   if (items.includes(disc1) || items.includes(disc2)) {
     Line1.draw()
     Line2.draw()
@@ -1150,10 +1179,10 @@ if (!canResettingGame){
     Line2.angle = Line1.angle
     Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
-    Line3.angle = angleInRadians + Math.PI / 2
+    Line3.angle = Line2.angle + Math.PI / 2
     Line4.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line4.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
-    Line4.angle = angleInRadians + -Math.PI / 2
+    Line4.angle = Line2.angle + -Math.PI / 2
     }
 }
     if (charging) {
@@ -1163,7 +1192,7 @@ if (!canResettingGame){
     Line2.angle = Line1.angle
     Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
-    Line3.angle = angleInRadians + Math.PI / 2
+    Line3.angle = Line2.angle + Math.PI / 2
     Line4.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
     Line4.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
     Line4.angle = angleInRadians + -Math.PI / 2
@@ -1188,13 +1217,6 @@ waterboundaries.forEach((waterboundary) => {
   playeronlyboundaries.forEach((playeronlyboundary) => {
     playeronlyboundary.draw();
   });
-  
-  if (player.pickup && !disc1.picked && !mapMode) {
-    buttons.draw();
-  }
-  if (player.pickup && !disc2.picked && !mapMode) {
-    buttons.draw();
-  }
 
   
   if (showHelpDragImage) {
@@ -1377,7 +1399,10 @@ if (inCage) {
       elementsPositionsBeforeMapMode[`playeronlyboundary${index}`].y;
   });
   canMove = false;
-  canResettingGame = true
+  canResettingGame = false
+  nextButton.style.display = "block"
+  replayButton.style.display = "block"
+
 }
   else {
     
@@ -1616,6 +1641,8 @@ if (inCage) {
         moving = false;
         overlappingItem = disc1;
         player.pickup = true;
+        eHelpButton.style.display = "block"
+        pickUpItemText.style.display = "block"
         break;
       }
 
@@ -1638,6 +1665,8 @@ if (inCage) {
         break;
       } else {
         player.pickup = false;
+        eHelpButton.style.display = "none"
+        pickUpItemText.style.display = "none"
       }
     }
 
@@ -1704,6 +1733,8 @@ if (inCage) {
         moving = false;
         overlappingItem = disc1;
         player.pickup = true;
+        eHelpButton.style.display = "block"
+        pickUpItemText.style.display = "block"
         break;
       }
       if (
@@ -1723,7 +1754,9 @@ if (inCage) {
         overlappingItem = disc2;
         player.pickup = true;
         break;
-      } else player.pickup = false;
+      } else {player.pickup = false;
+        eHelpButton.style.display = "none"
+        pickUpItemText.style.display = "none"}
     }
     if (moving) {
       movables.forEach((movable) => {
@@ -1788,6 +1821,8 @@ if (inCage) {
         moving = false;
         overlappingItem = disc1;
         player.pickup = true;
+        eHelpButton.style.display = "block"
+        pickUpItemText.style.display = "block"
         break;
       }
       if (
@@ -1807,7 +1842,9 @@ if (inCage) {
         overlappingItem = disc2;
         player.pickup = true;
         break;
-      } else player.pickup = false;
+      } else {player.pickup = false;
+        eHelpButton.style.display = "none"
+        pickUpItemText.style.display = "none"}
     }
     if (moving) {
       movables.forEach((movable) => {
@@ -1872,6 +1909,8 @@ if (inCage) {
         moving = false;
         overlappingItem = disc1;
         player.pickup = true;
+        eHelpButton.style.display = "block"
+        pickUpItemText.style.display = "block"
         break;
       }
       if (
@@ -1891,7 +1930,9 @@ if (inCage) {
         overlappingItem = disc2;
         player.pickup = true;
         break;
-      } else player.pickup = false;
+      } else {player.pickup = false;
+        eHelpButton.style.display = "none"
+        pickUpItemText.style.display = "none"}
     }
     if (moving) {
       movables.forEach((movable) => {
@@ -1930,11 +1971,21 @@ window.addEventListener("keydown", (e) => {
       if (canShowMap) {
         mapMode = !mapMode;
         keys.q.pressed = true;
+        if (mapMode) {
+       
+        throwDiscText.textContent = "Move"
+        eHelpButton.style.display = "none"
+        pickUpItemText.style.display = "none"
         circleDot.moving = false
         degrees.moving = false;
         angleMeter.moving = false
         aimLine.moving = false
-        if (mapMode) {
+        angleLock = true
+        counterValue.style.display = "none"
+        anglelockedtext.style.color = "rgb(253, 231, 190)"
+        anglelockedtext.textContent = "Unlock Angle" 
+        viewMapText.style.color = "rgb(253, 231, 190)"
+        viewMapText.textContent = "Close Map"
           canResettingGame = false
           canMove = false;
           showHelpDragImage = true;
@@ -1950,6 +2001,12 @@ window.addEventListener("keydown", (e) => {
             Line3: { x1: Line3.x1, y1: Line3.y1 },
             Line4: { x1: Line4.x1, y1: Line4.y1 },
           };
+          Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
+          Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
+          Line3.angle = Line2.angle + Math.PI / 2
+          Line4.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
+          Line4.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
+          Line4.angle = Line2.angle + -Math.PI / 2
 
           boundaries.forEach((boundary, index) => {
             elementsPositionsBeforeMapMode[`boundary${index}`] = {
@@ -1972,6 +2029,10 @@ window.addEventListener("keydown", (e) => {
 
           mapModefunc();
         } else {
+          throwDiscText.textContent = "Hold to Throw"
+          counterValue.style.display = "block"
+          viewMapText.style.color = "white"
+          viewMapText.textContent = "View Map"
           canResettingGame = true
           if (!items.includes(disc1)){
             canMove = true
@@ -1981,6 +2042,7 @@ window.addEventListener("keydown", (e) => {
             degrees.moving = false
             angleMeter.moving = false
             aimLine.moving = false
+            
           }
           if (!angleLock) {
           circleDot.moving = true
@@ -2032,20 +2094,27 @@ window.addEventListener("keydown", (e) => {
         keys.m.pressed = true;
     break;
     case " ":
-      if (!charging && !isThrowing) {
+      if (!charging && !isThrowing && disc1.picked) {
       keys.space.pressed = true;
       angleLock = !angleLock
       if (angleLock) {
+        anglelockedtext.style.color = "rgb(253, 231, 190)"
+        anglelockedtext.textContent = "Unlock Angle"
           circleDot.moving = false
           degrees.moving = false
           angleMeter.moving = false
           aimLine.moving = false
       }
       if (!angleLock) {
+        
+        
         circleDot.moving = true
         degrees.moving = true
+        anglelockedtext.style.color = "white"
+        anglelockedtext.textContent = "Lock Angle"
           angleMeter.moving = true
           aimLine.moving = true
+          
         
     }}
   break;
@@ -2090,6 +2159,7 @@ resetButton.addEventListener("click", function() {
 });
 
 canvas.addEventListener("mousemove", (event) => {
+  
   if (mapMode) {
     isMouseMoving = true;
     mouseX = event.clientX - canvas.getBoundingClientRect().left;
@@ -2104,10 +2174,17 @@ canvas.addEventListener("mousemove", (event) => {
     }
   }
 
-  if (mouseDragging && !isThrowing && items.includes(disc1) && charging && !resett) {
+  if (keys.mouseLeft.pressed && !isThrowing && items.includes(disc1) && charging && !resett) {
+    mouseDragging = true
+    throwDiscText.textContent = "Release to Throw"
+    anglelockedtext.style.display = "none"
+      spaceHelpButton.style.display = "none"
+      qHelpButton.style.display = "none"
+      viewMapText.style.display = "none"
     currentMouseX = event.clientX - canvas.getBoundingClientRect().left;
     currentMouseY = event.clientY - canvas.getBoundingClientRect().top;
-
+disc1.position.x = currentMouseX - 7.5
+        disc1.position.y = currentMouseY - 7.5
     const deltaX = currentMouseX - canvas.width / 2;
     const deltaY = currentMouseY - canvas.height / 2;
     const distanceFromCenter = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
@@ -2362,8 +2439,10 @@ let powerangle2 =
 //Mouseup ---------------------------------------------------------------------------------------- Mouseup
 canvas.addEventListener("mouseup", (event) => {
   keys.mouseLeft.pressed = false;
-  if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode && !resett) {
+  if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode && !resett && mouseDragging) {
     throwcount++
+    throwDiscText.style.display = "none"
+    leftMousehelpButton.style.display = "none"
     counterValue.textContent = throwcount;
     isThrowing = true;
     canResettingGame = false;
@@ -2432,6 +2511,29 @@ canvas.addEventListener("mouseup", (event) => {
       }
     }
   }
+  else if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode && !resett && !mouseDragging) {
+        angleInRadians = circleDot.angle;
+        canShowMap = true;
+        charging = false
+        startanglecharge = circleDot.angle;
+        if (!angleLock) {
+        circleDot.moving = true;
+        degrees.moving = true;
+        angleMeter.moving = true
+        aimLine.moving = true;
+      }
+      if (angleLock) {
+      Line1.length = (150 * items[0].speed) * 300;
+    Line1.angle = startanglecharge
+    Line2.length = (150 * items[0].speed) * 150;
+    Line2.angle = Line1.angle
+    Line3.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
+    Line3.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
+    Line3.angle = Line2.angle + Math.PI / 2
+    Line4.x1 = Line2.x1 + Math.cos(Line2.angle) * Line2.length
+    Line4.y1 = Line2.y1 + Math.sin(Line2.angle) * Line2.length
+    Line4.angle = Line2.angle + -Math.PI / 2
+      }}
 });
 //Mouseup ---------------------------------------------------------------------------------------- Mouseup
 
@@ -2447,16 +2549,12 @@ canvas.addEventListener("mousedown", (event) => {
         circleDot.moving = false;
         canShowMap = false;
         charging = true
-        mouseDragging = true;
         degrees.moving = false;
         angleMeter.moving = false
         aimLine.moving = false;
         startanglecharge = circleDot.angle;
         charging = true;
-        currentMouseX = event.clientX - canvas.getBoundingClientRect().left;
-        currentMouseY = event.clientY - canvas.getBoundingClientRect().top;
-        disc1.position.x = currentMouseX - 7.5
-        disc1.position.y = currentMouseY - 7.5
+        
         
       }
     }
@@ -2465,9 +2563,16 @@ canvas.addEventListener("mousedown", (event) => {
 //Mousedown ---------------------------------------------------------------------------------------- Mousedown
 volumeButton.addEventListener("click", function() {
   isMusicPlaying = !isMusicPlaying
-  if (!isMusicPlaying) {
+  if (!isMusicPlaying && randomInteger === 0) {
   backgroundMusic.pause();} 
-  else {backgroundMusic.play();}
+  if (randomInteger === 0 && isMusicPlaying) {
+    backgroundMusic.play();
+  }
+  if (!isMusicPlaying && randomInteger === 1) {
+    backgroundMusic1.pause();} 
+    if (randomInteger === 1 && isMusicPlaying) {
+      backgroundMusic1.play();
+    }
 });
 
 
@@ -2477,14 +2582,23 @@ volumeButton.addEventListener("click", function() {
 if (onMenu) {
 playButton.addEventListener("click", function() {
   // Perform actions related to the canvas when the button is clicked
-  
+  overlappingItem = disc1;
+        player.pickup = true;
   playButton.disabled = true;
   playButton.style.display = "none";
   menu.style.backgroundImage = "none";
   resetButton.style.display = "block";
   volumeButton.style.display = "block";
   counterValue.style.display = "block";
+  eHelpButton.style.display = "block";
+  pickUpItemText.style.display = "block";
   onMenu = false
+  randomInteger = Math.floor(Math.random() * 2);
+  if (randomInteger === 0) {
   backgroundMusic.play();
+}
+if (randomInteger === 1) {
+  backgroundMusic1.play();
+}
   animate();
 })};
