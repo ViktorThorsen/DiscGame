@@ -111,7 +111,7 @@ const rndInt2 = randomIntFromInterval(-250, 65);
 
 //Images ---------------------------------------------------------------------------------------------- Images
 const image = new Image();
-image.src = "./img/Map1.jpg";
+image.src = "./img/Map1.png";
 
 const menuBackgroundIMG = new Image();
 menuBackgroundIMG.src = "./img/menubackground.jpg";
