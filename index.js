@@ -111,10 +111,10 @@ const rndInt2 = randomIntFromInterval(-250, 65);
 
 //Images ---------------------------------------------------------------------------------------------- Images
 const image = new Image();
-image.src = "./img/Map1.png";
+image.src = "./img/Map1.jpg";
 
 const menuBackgroundIMG = new Image();
-menuBackgroundIMG.src = "./img/menubackground.png";
+menuBackgroundIMG.src = "./img/menubackground.jpg";
 
 const foregroundImage = new Image();
 foregroundImage.src = "./img/foregroundobjects.png";
@@ -125,23 +125,20 @@ discImage.src = "./img/disc.png";
 const discImage2 = new Image();
 discImage2.src = "./img/disc2.png";
 
-const discImage3 = new Image();
-discImage3.src = "./img/discgold.png";
-
 const controlpointIMG = new Image();
-controlpointIMG.src = "./img/controlpoint.png";
+controlpointIMG.src = "";
 
 const controlpointIMG2 = new Image();
-controlpointIMG2.src = "./img/controlpoint2.png";
+controlpointIMG2.src = "";
 
 const controlpointIMG3 = new Image();
-controlpointIMG3.src = "./img/controlpoint3.png";
+controlpointIMG3.src = "";
 
 const controlpointIMG4 = new Image();
-controlpointIMG4.src = "./img/controlpoint4.png";
+controlpointIMG4.src = "";
 
 const controlpointIMG5 = new Image();
-controlpointIMG5.src = "./img/controlpoint5.png";
+controlpointIMG5.src = "";
 
 const powerpoint1Img = new Image();
 powerpoint1Img.src = "./img/powerpoint1.png";
@@ -167,9 +164,6 @@ aimLineimg.src = "./img/aimLineimg.png";
 const discinbag1 = new Image();
 discinbag1.src = "./img/discinpack.png";
 
-const discinbag2 = new Image();
-discinbag2.src = "./img/discinpack2.png";
-
 const playerUpImage = new Image();
 playerUpImage.src = "./img/playerUp.png";
 
@@ -191,8 +185,6 @@ cageImage.src = "./img/cage.png";
 const dot = new Image();
 dot.src = "./img/dot.png";
 
-const inventory = new Image();
-inventory.src = "./img/inventorylayout.png";
 //Images ---------------------------------------------------------------------------------------------- Images
 
 //Objects --------------------------------------------------------------------------------------------- Objects
@@ -419,15 +411,6 @@ const disc2 = new Disc({
   turn: 1,
   startingspeed: 0.04,
 });
-const disc3 = new Disc({
-  position: {
-    x: canvas.width / 2 - 7.5,
-    y: canvas.height / 2 - 7.5,
-  },
-  image: discImage3,
-  picked: false,
-  speed: 3,
-});
 
 const cage = new Sprite({
   position: {
@@ -445,14 +428,6 @@ const discinpack = new Sprite({
   image: discinbag1,
 });
 
-const discinpack2 = new Sprite({
-  position: {
-    x: 90,
-    y: canvas.height - 75,
-  },
-  image: discinbag2,
-});
-
 const buttons = new Sprite({
   position: {
     x: canvas.width / 2 - 30,
@@ -467,15 +442,6 @@ const backPack = new Sprite({
     y: canvas.height - 100,
   },
   image: backpack,
-});
-
-const invent = new Sprite({
-  position: {
-    x: canvas.width / 2 - 250,
-    y: canvas.height / 2 - 250,
-  },
-  image: inventory,
-  hidden: true,
 });
 
 const Line1 = new Line({
@@ -665,6 +631,7 @@ function pickUpItem() {
 //pickUpItem ---------------------------------------------------------------------------------------- pickUpItem
 
 function resetGame() {
+linesPositionsBeforeMapMode = {}
 throwcount = 0
 counterValue.textContent = throwcount;
 angleLock = false
@@ -712,6 +679,11 @@ landed = true;
 overlappingItem = "";
 canMove = true;
 u = 0;
+
+anglelockedtext.style.color = "white"
+anglelockedtext.textContent = "Lock Angle"
+qHelpButton.style.display = "block"
+viewMapText.style.display = "block"
 winButton.style.display = "none"
 resetButton.style.bottom = "84%"
 resetButton.style.left = "12%"
@@ -735,6 +707,8 @@ player.pickup = true;
   player.pickup = true
   disc1.picked = false
   overlappingItem.picked = false
+  angleMeter.moving = true
+  degrees.moving = true
   circleDot.moving = true
   disc1.landed = true
     items.shift();
@@ -1049,37 +1023,37 @@ else if (inCage) {
       perfect.position.y = canvas.height / 2 - 12.5
 if ( throwcount === 1) {
   winButton.textContent = "Hole In One!"
-  winButton.style.backgroundImage = "url(img/menubackground.png)";
+  winButton.style.backgroundImage = "url(img/menubackground.jpg)";
 }
 if ( throwcount === 2) {
   winButton.textContent = "Eagle!"
-  winButton.style.backgroundImage = "url(img/eagle.png)";;
+  winButton.style.backgroundImage = "url(img/eagle.jpg)";;
 }
 if ( throwcount === 3) {
   winButton.textContent = "Birdie!"
-  winButton.style.backgroundImage = "url(img/birdie.png)";;
+  winButton.style.backgroundImage = "url(img/birdie.jpg)";;
 }
 if ( throwcount === 4) {
   winButton.textContent = "Par!"
-  winButton.style.backgroundImage = "url(img/par.png)";
+  winButton.style.backgroundImage = "url(img/par.jpg)";
 }
 if ( throwcount === 5) {
   winButton.textContent = "Boogie"
-  winButton.style.backgroundImage = "url(img/boogie.png)";
+  winButton.style.backgroundImage = "url(img/boogie.jpg)";
 }
 if (throwcount === 6) {
   winButton.textContent = "Dubble Boogie"
-  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.backgroundImage = "url(img/boogie.jpg)"
   winButton.style.fontSize = "20px"
 }
 if (throwcount === 7) {
   winButton.textContent = "Tripple Boogie"
-  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.backgroundImage = "url(img/boogie.jpg)"
   winButton.style.fontSize = "20px"
 }
 if (throwcount >= 8) {
   winButton.textContent = "Try Again"
-  winButton.style.backgroundImage = "url(img/boogie.png)"
+  winButton.style.backgroundImage = "url(img/boogie.jpg)"
   winButton.style.fontSize = "20px"
 }
 disc1.landed
@@ -1139,9 +1113,6 @@ function animate() {
   }
   if (disc1.picked && !mapMode) {
     discinpack.draw();
-}
-  if (disc2.picked && !mapMode) {
-    discinpack2.draw();
 }
 if (canResettingGame){
   resetButton.style.display = "block"
@@ -1230,7 +1201,7 @@ cage.draw();
   if (items.includes(items[0]) && items[0].landed) {
     for (let i = 0; i < waterboundaries.length; i++) {
       const waterboundary = waterboundaries[i];
-  
+
       if (
         rectangularCollision({
           rectangle1: {
@@ -1375,7 +1346,8 @@ cage.draw();
       Line4.x1 = elementsPositionsBeforeMapMode.Line4.x1;
       Line4.y1 = elementsPositionsBeforeMapMode.Line4.y1;
 
-      
+    qHelpButton.style.display = "block"
+    viewMapText.style.display = "block"
 if (inCage) {
   disc1.position.x = cage.position.x + 7-5
   disc1.position.y = cage.position.y + 7-5
@@ -1402,6 +1374,8 @@ if (inCage) {
   canResettingGame = false
   nextButton.style.display = "block"
   replayButton.style.display = "block"
+  qHelpButton.style.display = "none"
+    viewMapText.style.display = "none"
 
 }
   else {
@@ -1980,10 +1954,13 @@ window.addEventListener("keydown", (e) => {
         degrees.moving = false;
         angleMeter.moving = false
         aimLine.moving = false
+        if (disc1.picked) {
         angleLock = true
-        counterValue.style.display = "none"
         anglelockedtext.style.color = "rgb(253, 231, 190)"
         anglelockedtext.textContent = "Unlock Angle" 
+      }
+        counterValue.style.display = "none"
+        
         viewMapText.style.color = "rgb(253, 231, 190)"
         viewMapText.textContent = "Close Map"
           canResettingGame = false
@@ -2441,6 +2418,10 @@ canvas.addEventListener("mouseup", (event) => {
   keys.mouseLeft.pressed = false;
   if (event.button === 0 && !isThrowing && items.includes(disc1) && !mapMode && !resett && mouseDragging) {
     throwcount++
+    angleLock = false
+    anglelockedtext.style.color = "white"
+    anglelockedtext.textContent = "Lock Angle"
+    throwDiscText.textContent = "Hold to Throw"
     throwDiscText.style.display = "none"
     leftMousehelpButton.style.display = "none"
     counterValue.textContent = throwcount;
@@ -2592,6 +2573,8 @@ playButton.addEventListener("click", function() {
   counterValue.style.display = "block";
   eHelpButton.style.display = "block";
   pickUpItemText.style.display = "block";
+  qHelpButton.style.display = "block"
+    viewMapText.style.display = "block"
   onMenu = false
   randomInteger = Math.floor(Math.random() * 2);
   if (randomInteger === 0) {
